@@ -4,6 +4,7 @@ const emits = defineEmits(["search"]);
 const id = ref(useId());
 const model = defineModel();
 const focused = ref(false);
+let lastSelectedItem = "";
 
 const matchedItem = computed(() =>
   props.suggesion.filter((item) => {
@@ -22,11 +23,13 @@ const onInput = (evt) => {
 const onItemSelection = (item) => {
   model.value = item;
   focused.value = false;
+  lastSelectedItem = item;
 };
 
 const clickoutsideHandler = (evt) => {
   if (evt.target.id !== id.value) {
     focused.value = false;
+    model.value = lastSelectedItem;
   }
 };
 
@@ -43,6 +46,7 @@ onBeforeUnmount(() => {
   <div class="p-5">
     <label :for="id"> {{ label }} </label>
     <div class="py-2">
+      
       <input
         v-model.trim="model"
         class="border-2 border-black border-solid"
