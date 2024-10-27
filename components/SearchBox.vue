@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["label", "suggesion"]);
+const props = defineProps(["label", "suggesion", "autoCorrection"]);
 const emits = defineEmits(["search"]);
 const id = ref(useId());
 const model = defineModel();
@@ -29,7 +29,15 @@ const onItemSelection = (item) => {
 const clickoutsideHandler = (evt) => {
   if (evt.target.id !== id.value) {
     focused.value = false;
-    model.value = lastSelectedItem;
+    if (props.autoCorrection) {
+      model.value = lastSelectedItem;
+      return;
+    }
+
+    if (!matchedItem.value.length) {
+      model.value = "";
+      return;
+    }
   }
 };
 
@@ -46,7 +54,6 @@ onBeforeUnmount(() => {
   <div class="p-5">
     <label :for="id"> {{ label }} </label>
     <div class="py-2">
-      
       <input
         v-model.trim="model"
         class="border-2 border-black border-solid"
@@ -61,6 +68,7 @@ onBeforeUnmount(() => {
     >
       <div
         v-for="item in matchedItem"
+        :id="id"
         @click="onItemSelection(item)"
         class="border-solid border-2"
       >

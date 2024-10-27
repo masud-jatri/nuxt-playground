@@ -22,14 +22,16 @@ const onDropOffSearch = (evt: Event) => {
     </div>
     <SearchBox
       v-model="pickup"
-      label="Pickup Location"
+      label="Pickup Location(Auto Correction -> On)"
       :suggesion="cityList"
+      :autoCorrection="true"
       @search="onPickSearch"
     />
     <SearchBox
       v-model="drop"
-      label="Drop Off Location"
+      label="Drop Off Location(Auto Correction -> Off)"
       :suggesion="cityList"
+      :autoCorrection="false"
       @search="onDropOffSearch"
     />
   </div>
